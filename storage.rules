@@ -1,0 +1,23 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Public previews & thumbnails: anyone can view
+    match /wallpapers_previews/{allPaths=**} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
+    // Original 4K Desktop & Mobile wallpapers:
+    // In production, locked for reading unless authenticated/authorized.
+    match /wallpapers_desktop/{allPaths=**} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
+    match /wallpapers_mobile/{allPaths=**} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}

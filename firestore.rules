@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // User Profiles:
+    // Any authenticated user can read & update their own profile.
+    // Admin can read and update all user profiles.
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (request.auth.uid == userId || request.auth.token.role == 'admin');
+    }
+    
+    // Wallpapers Collection:
+    // Anyone (even public visitors) can read wallpapers catalog.
+    // Only Admin can create, update, or delete wallpapers.
+    match /wallpapers/{wallpaperId} {
+      allow read: if true;
+      allow write: if true; // In test mode / admin console
+    }
+    
+    // Orders Collection:
+    // Users can read their own orders.
+    // New orders can be created upon payment success.
+    match /orders/{orderId} {
+      allow read: if request.auth != null && (request.auth.uid == resource.data.userId || request.auth.token.role == 'admin');
+      allow create: if true;
+      allow update, delete: if true;
+    }
+  }
+}

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ArtDrop - Master Admin Console</title>
+  <link rel="icon" href="../images/favicon.png?v=2" type="image/png">
+  
+  <!-- Modern Inter & JetBrains Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- Standalone Tailwind CSS CDN (Guarantees zero style conflicts with landing page) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .admin-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+    }
+    .admin-card-header {
+      border-bottom: 1px solid #f1f5f9;
+      padding: 20px 24px;
+    }
+    .admin-tab-btn {
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 10px;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .admin-tab-btn.active {
+      background-color: #0f172a;
+      color: #ffffff;
+    }
+    .admin-tab-btn:not(.active) {
+      color: #64748b;
+    }
+    .admin-tab-btn:not(.active):hover {
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top Navbar -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between py-3">
+      <div class="flex items-center gap-4">
+        <a href="/" class="flex items-center gap-2">
+          <img src="../images/artdrop-logo.webp?v=2" alt="ArtDrop" class="h-10 w-auto">
+        </a>
+        <div class="h-5 w-px bg-slate-200 hidden sm:block"></div>
+        <span class="bg-slate-900 text-white text-[11px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full">
+          Master Admin
+        </span>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <a href="/" target="_blank" class="text-xs font-bold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 transition">
+          <span>View Storefront</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        </a>
+        <a href="/vault/" target="_blank" class="text-xs font-bold text-slate-600 hover:text-slate-900 hidden sm:flex items-center gap-1.5 transition">
+          <span>4K Vault</span>
+        </a>
+        <div id="admin-user-pill"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-8">
+
+    <!-- Auth Guard (shown if locked) -->
+    <div id="admin-auth-guard" class="max-w-md mx-auto my-16 admin-card p-8 text-center">
+      <img src="../images/artdrop-logo.webp?v=2" alt="ArtDrop" class="h-14 w-auto mx-auto mb-4">
+      <h2 class="text-2xl font-black text-slate-900 mb-1">Admin Authentication</h2>
+      <p class="text-xs text-slate-500 mb-6">Enter your Admin Secret Passcode to unlock the console</p>
+
+      <div class="space-y-3">
+        <input type="password" id="admin-passcode-input" placeholder="Enter Admin Secret Passcode" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition font-mono">
+        <button id="admin-passcode-btn" type="button" class="w-full rounded-xl bg-slate-900 py-3.5 text-xs font-extrabold uppercase tracking-widest text-white hover:bg-slate-800 transition cursor-pointer shadow-sm">
+          Unlock Admin Dashboard
+        </button>
+      </div>
+
+      <div id="admin-login-msg" class="hidden mt-4 text-xs font-semibold p-3 rounded-xl text-left"></div>
+    </div>
+
+    <!-- Dashboard Content (shown after unlock) -->
+    <div id="admin-dashboard-content" class="hidden space-y-8">
+
+      <!-- KPI Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="admin-card p-6">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Wallpapers</span>
+            <span class="p-2 rounded-xl bg-slate-100 text-slate-700">🖼️</span>
+          </div>
+          <h3 id="stat-wallpapers-count" class="text-3xl font-black text-slate-900 mt-2">0</h3>
+          <p class="text-[11px] text-slate-500 mt-1">4K Assets in Database</p>
+        </div>
+
+        <div class="admin-card p-6">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Revenue</span>
+            <span class="p-2 rounded-xl bg-emerald-50 text-emerald-700">💰</span>
+          </div>
+          <h3 id="stat-revenue-total" class="text-3xl font-black text-emerald-600 mt-2">₹0</h3>
+          <p class="text-[11px] text-emerald-700 font-semibold mt-1">Gross Payment Sales</p>
+        </div>
+
+        <div class="admin-card p-6">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Orders</span>
+            <span class="p-2 rounded-xl bg-blue-50 text-blue-700">📦</span>
+          </div>
+          <h3 id="stat-orders-count" class="text-3xl font-black text-slate-900 mt-2">0</h3>
+          <p class="text-[11px] text-slate-500 mt-1">Notifications to <span class="font-bold text-slate-700">karanpw.live</span></p>
+        </div>
+
+        <div class="admin-card p-6">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Active Customers</span>
+            <span class="p-2 rounded-xl bg-purple-50 text-purple-700">👥</span>
+          </div>
+          <h3 id="stat-users-count" class="text-3xl font-black text-slate-900 mt-2">0</h3>
+          <p class="text-[11px] text-slate-500 mt-1">Registered Vault Users</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex items-center gap-2 border-b border-slate-200 pb-3 overflow-x-auto">
+        <button id="tab-btn-orders" class="admin-tab-btn active">
+          📦 Customer Orders (<span id="tab-orders-count">0</span>)
+        </button>
+        <button id="tab-btn-upload" class="admin-tab-btn">
+          🚀 Upload 4K Wallpaper
+        </button>
+        <button id="tab-btn-marquee" class="admin-tab-btn">
+          🎪 Hero Showcase (<span id="tab-marquee-count">0</span>)
+        </button>
+        <button id="tab-btn-list" class="admin-tab-btn">
+          🖼️ Manage Catalog (<span id="tab-wallpapers-count">0</span>)
+        </button>
+        <button id="tab-btn-pricing" class="admin-tab-btn">
+          💲 Live Pricing & Coupons
+        </button>
+        <button id="tab-btn-users" class="admin-tab-btn">
+          👥 Customers & Access
+        </button>
+      </div>
+
+      <!-- TAB 1: Customer Orders (Primary for Karan) -->
+      <div id="tab-content-orders" class="admin-card">
+        <div class="admin-card-header flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h3 class="text-lg font-black text-slate-900">Customer Orders & Live Notifications</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Every checkout order is saved here and emailed directly to <b class="text-slate-800">karanpw.live@gmail.com</b></p>
+          </div>
+          <button id="btn-refresh-orders" type="button" class="text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition cursor-pointer">
+            ↻ Refresh Orders
+          </button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-bold">
+              <tr>
+                <th class="py-3.5 px-6">Customer Details</th>
+                <th class="py-3.5 px-6">Phone / WhatsApp</th>
+                <th class="py-3.5 px-6">Pack Ordered</th>
+                <th class="py-3.5 px-6">Amount</th>
+                <th class="py-3.5 px-6">UPI / UTR Number</th>
+                <th class="py-3.5 px-6">Status</th>
+                <th class="py-3.5 px-6 text-right">Date & Time</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body" class="divide-y divide-slate-100 font-medium">
+              <!-- Dynamically populated from Firestore -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 2: Upload 4K Wallpaper -->
+      <div id="tab-content-upload" class="hidden admin-card p-8">
+        <div class="mb-6 pb-6 border-b border-slate-100">
+          <h3 class="text-xl font-black text-slate-900">Publish New 4K Wallpaper</h3>
+          <p class="text-xs text-slate-500 mt-1">Upload uncompressed 4K files for both Desktop (16:9) and Mobile (9:16)</p>
+        </div>
+
+        <!-- 1-Click Database Sync Banner -->
+        <div class="mb-8 flex flex-wrap items-center justify-between gap-4 p-5 rounded-2xl bg-amber-50/70 border border-amber-200/60">
+          <div>
+            <p class="text-xs font-black text-amber-900 uppercase tracking-wider">⚡ Quick Start Database Seeder</p>
+            <p class="text-xs text-amber-800 mt-0.5">Populate your Firestore database with 12+ built-in ArtDrop luxury 4K artworks in 1 click.</p>
+          </div>
+          <button type="button" id="btn-seed-catalog" class="rounded-xl border border-amber-300 bg-white px-4 py-2 text-xs font-black uppercase tracking-wider text-amber-900 hover:bg-amber-900 hover:text-white transition shadow-sm cursor-pointer">
+            Sync 12+ Masterpieces to Firestore
+          </button>
+        </div>
+
+        <form id="wallpaper-upload-form" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Wallpaper Title *</label>
+              <input type="text" id="wp-title" required placeholder="e.g. Monaco Grand Prix Ferrari 4K" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-xs text-slate-900 outline-none focus:border-slate-900 transition">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Category *</label>
+              <select id="wp-category" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-xs text-slate-900 outline-none focus:border-slate-900 transition bg-white">
+                <option value="Cars & Supercars">Cars & Supercars</option>
+                <option value="Luxury & Wealth">Luxury & Wealth</option>
+                <option value="Cinema & Characters">Cinema & Characters</option>
+                <option value="Animals & Power">Animals & Power</option>
+                <option value="Sports & Champions">Sports & Champions</option>
+                <option value="Aesthetic & Landscape">Aesthetic & Landscape</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Tags (Comma-separated)</label>
+            <input type="text" id="wp-tags" placeholder="ferrari, monaco, f1, racing, luxury" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-xs text-slate-900 outline-none focus:border-slate-900 transition">
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Desktop File -->
+            <div class="rounded-2xl border-2 border-dashed border-slate-300 p-6 text-center hover:border-slate-900 transition bg-slate-50/50">
+              <svg class="mx-auto h-8 w-8 text-slate-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <p class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-1">Desktop 4K File (16:9)</p>
+              <p class="text-[11px] text-slate-400 mb-3">3840 x 2160 UHD (WEBP, PNG, JPG)</p>
+              <input type="file" id="wp-desktop-file" accept="image/*" class="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-slate-900 file:text-white hover:file:bg-slate-800 cursor-pointer">
+            </div>
+
+            <!-- Mobile File -->
+            <div class="rounded-2xl border-2 border-dashed border-slate-300 p-6 text-center hover:border-slate-900 transition bg-slate-50/50">
+              <svg class="mx-auto h-8 w-8 text-slate-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"/></svg>
+              <p class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-1">Mobile 4K File (9:16) <span class="text-slate-400 font-normal">(Optional)</span></p>
+              <p class="text-[11px] text-slate-400 mb-3">Leave empty to auto-use Desktop image</p>
+              <input type="file" id="wp-mobile-file" accept="image/*" class="text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-slate-900 file:text-white hover:file:bg-slate-800 cursor-pointer">
+            </div>
+          </div>
+
+          <!-- Or Image URL Option -->
+          <div class="rounded-2xl border border-slate-200 p-5 bg-slate-50/70">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-700">🔗 Or Use Direct 4K Image URL (Web Link)</span>
+              <span class="text-[10px] text-slate-400">(Optional if uploading files above)</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">Desktop Image URL</label>
+                <input type="url" id="wp-desktop-url" placeholder="https://... or /images/..." class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs text-slate-900 outline-none focus:border-slate-900 bg-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">Mobile Image URL</label>
+                <input type="url" id="wp-mobile-url" placeholder="https://... or /images/..." class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs text-slate-900 outline-none focus:border-slate-900 bg-white">
+              </div>
+            </div>
+          </div>
+
+          <!-- Upload Progress -->
+          <div id="upload-progress-container" class="hidden space-y-2">
+            <div class="flex justify-between text-xs font-bold text-slate-800">
+              <span id="upload-status-text">Uploading to Storage...</span>
+              <span id="upload-percent-text">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+              <div id="upload-progress-bar" class="bg-slate-900 h-2 rounded-full transition-all duration-150" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <input type="checkbox" id="wp-show-marquee" checked class="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 cursor-pointer">
+            <label for="wp-show-marquee" class="text-xs font-bold text-slate-800 cursor-pointer select-none">
+              Feature in Homepage Hero Scrolling Showcase (Marquee)
+            </label>
+          </div>
+
+          <div id="upload-message" class="hidden text-xs font-semibold p-3.5 rounded-xl"></div>
+
+          <button type="submit" id="wp-submit-btn" class="w-full rounded-2xl bg-slate-900 py-4 text-xs font-black uppercase tracking-widest text-white shadow-lg hover:bg-slate-800 transition cursor-pointer">
+            Publish 4K Masterpiece to Vault
+          </button>
+        </form>
+      </div>
+
+      <!-- TAB: Homepage Showcase (Hero Marquee) -->
+      <div id="tab-content-marquee" class="hidden admin-card p-8 space-y-8">
+        <div class="border-b border-slate-100 pb-6">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xl">🎪</span>
+                <h3 class="text-xl font-black text-slate-900">Homepage Hero Scrolling Showcase</h3>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">Control which 4K wallpapers automatically scroll across the homepage mockups (Desktop + Mobile) in real time.</p>
+            </div>
+            <a href="/" target="_blank" class="rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white hover:bg-slate-800 transition flex items-center gap-2 shadow-sm">
+              <span>Preview Storefront</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Active Showcase Wallpapers -->
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2.5">
+              <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+              </span>
+              <h4 class="text-xs font-black uppercase tracking-wider text-slate-900">Active in Homepage Showcase</h4>
+            </div>
+            <span id="marquee-active-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+              0 Wallpapers Active
+            </span>
+          </div>
+
+          <div id="marquee-active-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Populated via admin.js -->
+          </div>
+        </div>
+
+        <!-- Available Wallpapers from Catalog -->
+        <div class="border-t border-slate-100 pt-8">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h4 class="text-xs font-black uppercase tracking-wider text-slate-900">Catalog Wallpapers (Click "+ Add" to Showcase on Homepage)</h4>
+              <p class="text-[11px] text-slate-500 mt-0.5">Other wallpapers in your library that are not currently in the hero marquee</p>
+            </div>
+            <span id="marquee-available-badge" class="text-xs font-bold text-slate-400">
+              0 Available
+            </span>
+          </div>
+
+          <div id="marquee-available-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Populated via admin.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: Manage Catalog -->
+      <div id="tab-content-list" class="hidden admin-card p-8">
+        <div class="mb-6 flex items-center justify-between">
+          <div>
+            <h3 class="text-xl font-black text-slate-900">Manage Published Catalog</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Live wallpapers stored in Firestore database and Firebase Storage</p>
+          </div>
+        </div>
+        <div id="wallpapers-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+      </div>
+
+      <!-- TAB 4: Live Pricing & Coupons -->
+      <div id="tab-content-pricing" class="hidden admin-card p-8 space-y-8">
+        <div>
+          <h3 class="text-xl font-black text-slate-900 mb-1">Live Storefront Pricing Settings</h3>
+          <p class="text-xs text-slate-500 mb-6">Change package pricing on the homepage without touching code</p>
+
+          <form id="pricing-settings-form" class="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Essential Pack Price (₹)</label>
+              <input type="number" id="price-standard" value="49" class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-xs text-slate-900 outline-none focus:border-slate-900">
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">VIP All-Access Price (₹)</label>
+              <input type="number" id="price-vip" value="149" class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-xs text-slate-900 outline-none focus:border-slate-900">
+            </div>
+            <div class="flex items-end">
+              <button type="submit" class="w-full rounded-xl bg-slate-900 py-3 text-xs font-black uppercase tracking-wider text-white hover:bg-slate-800 transition cursor-pointer">
+                Save Live Pricing
+              </button>
+            </div>
+          </form>
+          <div id="pricing-save-msg" class="hidden mt-3 text-xs font-semibold p-2.5 rounded-xl max-w-3xl"></div>
+        </div>
+
+        <div class="border-t border-slate-100 pt-8">
+          <h3 class="text-xl font-black text-slate-900 mb-1">Create Discount Coupon</h3>
+          <p class="text-xs text-slate-500 mb-6">Generate discount codes for promotional campaigns</p>
+
+          <form id="coupon-form" class="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Coupon Code *</label>
+              <input type="text" id="coupon-code" required placeholder="e.g. ARTDROP50" class="w-full uppercase rounded-xl border border-slate-300 px-4 py-2.5 text-xs text-slate-900 outline-none focus:border-slate-900 mono">
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Discount Percentage (%) *</label>
+              <input type="number" id="coupon-discount" required min="1" max="100" value="50" class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-xs text-slate-900 outline-none focus:border-slate-900">
+            </div>
+            <div class="flex items-end">
+              <button type="submit" class="w-full rounded-xl bg-slate-900 py-3 text-xs font-black uppercase tracking-wider text-white hover:bg-slate-800 transition cursor-pointer">
+                Create Coupon
+              </button>
+            </div>
+          </form>
+          <div id="coupon-list-container" class="mt-6 flex flex-wrap gap-3"></div>
+        </div>
+      </div>
+
+      <!-- TAB 5: Customers & Access -->
+      <div id="tab-content-users" class="hidden admin-card p-8">
+        <h3 class="text-xl font-black text-slate-900 mb-1">Registered Customers & Vault Permissions</h3>
+        <p class="text-xs text-slate-500 mb-6">Grant or revoke VIP 4K Vault download permissions with 1 click</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-bold">
+              <tr>
+                <th class="py-3.5 px-6">Customer Name</th>
+                <th class="py-3.5 px-6">Email Address</th>
+                <th class="py-3.5 px-6">Role</th>
+                <th class="py-3.5 px-6">Vault Access</th>
+                <th class="py-3.5 px-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body" class="divide-y divide-slate-100 font-medium"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script type="module" src="./admin.js?v=5"></script>
+</body>
+</html>
