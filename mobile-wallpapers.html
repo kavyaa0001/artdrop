@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mobile Phone Wallpapers - Available Soon | ArtDrop</title>
+  <meta name="description" content="ArtDrop 9:16 vertical smartphone wallpapers are under active curation. Available soon for iPhone and Android.">
+  <link rel="icon" href="images/favicon.png?v=2" type="image/png">
+
+  <!-- Preload Fonts -->
+  <link rel="preload" href="fonts/karla-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/cormorant-garamond-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
+
+  <style>
+    @font-face {
+      font-family: "Karla";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 200 800;
+      src: url("fonts/karla-latin-wght-normal.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Cormorant Garamond";
+      font-style: italic;
+      font-display: swap;
+      font-weight: 300 700;
+      src: url("fonts/cormorant-garamond-latin-wght-italic.woff2") format("woff2");
+    }
+  </style>
+
+  <!-- Tailwind Pre-compiled CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    :root {
+      --color-foreground: #000000 !important;
+    }
+    body {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      font-family: "Karla", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .font-serif-italic {
+      font-family: "Cormorant Garamond", Georgia, serif !important;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-black antialiased selection:bg-black selection:text-white flex flex-col">
+
+  <!-- =========================================================================
+       HEADER & NAVIGATION
+       ========================================================================= -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-black/10 shadow-xs">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3 sm:py-5">
+      <!-- Logo -->
+      <a href="/" class="flex items-center shrink-0">
+        <img src="images/artdrop-logo.webp?v=2" alt="ArtDrop Wallpapers" class="h-10 sm:h-14 md:h-18 w-auto">
+      </a>
+      
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-7 lg:gap-12 text-xs lg:text-sm font-extrabold uppercase tracking-[0.25em] text-black">
+        <a href="/" class="hover:opacity-50 transition px-2 py-1">Home</a>
+        <a href="/#galeria" class="hover:opacity-50 transition px-2 py-1">Gallery</a>
+        <a href="collection.html" class="hover:opacity-50 transition px-2 py-1">PC Wallpapers</a>
+        <a href="mobile-wallpapers.html" class="px-3 py-1 rounded-full bg-black text-white hover:opacity-85 transition" style="background-color: #000000 !important; color: #ffffff !important;">Mobile (Soon)</a>
+        <a href="/#manifesto" class="hover:opacity-50 transition px-2 py-1">Manifesto</a>
+        <a href="/#pack" class="hover:opacity-50 transition px-2 py-1">The Pack</a>
+        <a href="/#faq" class="hover:opacity-50 transition px-2 py-1">FAQ</a>
+      </nav>
+
+      <!-- Right Actions: CTA & Mobile Hamburger -->
+      <div class="flex items-center gap-2 sm:gap-4 shrink-0">
+        <a href="/#oferta" class="rounded-full bg-black px-4 sm:px-6 py-2 sm:py-2.5 text-[11px] sm:text-xs font-extrabold uppercase tracking-widest text-white shadow-md hover:bg-neutral-800 transition cursor-pointer" style="background-color: #000000 !important; color: #ffffff !important;">
+          <span style="color: #ffffff !important;">Get Access</span>
+        </a>
+        
+        <!-- Mobile Hamburger Button -->
+        <button id="mobile-menu-btn" type="button" aria-label="Toggle navigation menu" class="md:hidden flex items-center justify-center h-9 w-9 rounded-full border border-black/15 bg-neutral-100 hover:bg-neutral-200 text-black transition cursor-pointer">
+          <svg id="menu-icon-bars" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <svg id="menu-icon-close" class="hidden" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu-drawer" class="hidden md:hidden border-t border-black/10 bg-white/98 backdrop-blur-2xl px-6 py-4 shadow-2xl transition-all duration-300">
+      <nav class="flex flex-col gap-1 text-center">
+        <a href="/" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black hover:text-neutral-500 border-b border-black/5">Home</a>
+        <a href="/#galeria" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black hover:text-neutral-500 border-b border-black/5">Gallery</a>
+        <a href="collection.html" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black hover:text-neutral-500 border-b border-black/5">PC Wallpapers</a>
+        <a href="mobile-wallpapers.html" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black bg-neutral-100 font-bold border-b border-black/5 flex items-center justify-center gap-2">
+          <span>Mobile Wallpapers</span>
+          <span class="rounded-full bg-amber-400 px-2 py-0.5 text-[9px] font-bold text-black tracking-widest">SOON</span>
+        </a>
+        <a href="/#manifesto" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black hover:text-neutral-500 border-b border-black/5">Manifesto</a>
+        <a href="/#pack" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black hover:text-neutral-500 border-b border-black/5">The Pack</a>
+        <a href="/#faq" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black hover:text-neutral-500 border-b border-black/5">FAQ</a>
+        <div class="pt-3 pb-1">
+          <a href="collection.html" class="mobile-drawer-link inline-flex w-full items-center justify-center rounded-full bg-black py-3 text-xs font-black uppercase tracking-widest text-white shadow-lg cursor-pointer" style="background-color: #000000 !important; color: #ffffff !important;">
+            <span style="color: #ffffff !important;">Explore PC Collection</span>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CONTENT: CLEAN & ELEGANT "AVAILABLE SOON" PAGE
+       ========================================================================= -->
+  <main class="flex-grow flex items-center justify-center px-4 sm:px-6 py-14 sm:py-20">
+    <div class="max-w-3xl w-full text-center mx-auto">
+      
+      <!-- Eyebrow Pill -->
+      <div class="inline-flex items-center gap-2.5 rounded-full border border-black/15 bg-neutral-50 px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.3em] text-black shadow-xs">
+        <span class="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
+        <span>Smartphone Editions • 9:16 Vertical</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="mt-6 text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-black leading-tight">
+        Mobile Phone <br><span class="font-serif-italic">Wallpapers.</span>
+      </h1>
+      
+      <!-- Big Bold Status Pill Badge -->
+      <div class="mt-6 sm:mt-8 inline-block">
+        <div class="rounded-full bg-black text-white px-8 sm:px-10 py-3.5 sm:py-4 text-xs sm:text-sm font-black uppercase tracking-[0.35em] shadow-xl inline-flex items-center gap-3 border border-black" style="background-color: #000000 !important; color: #ffffff !important;">
+          <span class="h-2.5 w-2.5 rounded-full bg-amber-400 shadow-[0_0_10px_#fbbf24] animate-ping"></span>
+          <span style="color: #ffffff !important;">AVAILABLE SOON</span>
+        </div>
+      </div>
+
+      <!-- Clean Explanation Card -->
+      <div class="mt-10 sm:mt-12 rounded-3xl border border-black/15 bg-neutral-50/70 p-6 sm:p-10 text-center shadow-sm max-w-2xl mx-auto">
+        <div class="h-12 w-12 rounded-2xl bg-white border border-black/10 mx-auto flex items-center justify-center shadow-xs">
+          <!-- Smartphone SVG -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>
+        </div>
+
+        <h2 class="mt-4 text-xl sm:text-2xl font-bold tracking-tight text-black">
+          Under Active Curation
+        </h2>
+
+        <p class="mt-3 text-sm sm:text-base text-neutral-700 leading-relaxed font-medium">
+          Mobile phone wallpapers abhi release nahi hui hain. Hum iPhone aur Android ke liye custom <strong>9:16 vertical smartphone wallpapers</strong> tayar kar rahe hain.
+        </p>
+
+        <p class="mt-3 text-xs sm:text-sm text-neutral-500 leading-relaxed max-w-lg mx-auto">
+          Har vertical edition mein thick impasto brushstroke detailing, deep OLED blacks, aur high-contrast lighting balance ki ja rahi hai taaki lock screen par original canvas jaisa aesthetic look mile. Yeh drop jald live ho jayega!
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+        <!-- Button to go to PC collection -->
+        <a href="collection.html" class="w-full sm:w-auto rounded-full bg-black text-white px-8 py-4 text-xs font-black uppercase tracking-widest shadow-xl hover:bg-neutral-800 transition cursor-pointer inline-flex items-center justify-center gap-2" style="background-color: #000000 !important; color: #ffffff !important;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>
+          <span style="color: #ffffff !important;">← Explore PC Wallpapers (10 Available)</span>
+        </a>
+
+        <!-- Button to get lifetime pack -->
+        <a href="/#oferta" class="w-full sm:w-auto rounded-full border-2 border-black/20 bg-white hover:border-black text-black px-8 py-3.5 text-xs font-black uppercase tracking-widest transition cursor-pointer">
+          Get Lifetime Pack (From ₹49)
+        </a>
+      </div>
+
+      <p class="mt-6 text-xs text-neutral-400">
+        *Notice: Jo members abhi collection purchase karenge, unhe Mobile Wallpapers release hote hi free instant access milega.
+      </p>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="border-t border-black/10 bg-white px-6 py-8 text-center mt-auto">
+    <div class="mx-auto max-w-5xl">
+      <img src="images/artdrop-logo-footer.webp?v=2" alt="ArtDrop Wallpapers" class="mx-auto h-12 w-auto md:h-14">
+      
+      <!-- Instagram Link -->
+      <a href="https://www.instagram.com/artt.drop?igsi=MXhlZWg4c2N0dTB5eg%3D%3D&utm_source=organic&utm_campaign=&utm_medium=&utm_content=&utm_term=" target="_blank" rel="noopener noreferrer" aria-label="ArtDrop Wallpapers on Instagram" class="mt-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/15 text-black hover:border-black hover:bg-black hover:text-white transition cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      </a>
+
+      <p class="mt-4 text-xs font-bold uppercase tracking-widest text-neutral-500">
+        © 2026 ArtDrop. All rights reserved.
+      </p>
+      
+      <div class="mt-3 flex items-center justify-center gap-6 text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+        <a href="privacy/index.html" class="hover:text-black transition">Privacy Policy</a>
+        <span>•</span>
+        <a href="terms/index.html" class="hover:text-black transition">Terms of Service</a>
+        <span>•</span>
+        <a href="vault/index.html" class="hover:text-black transition">Member Vault</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Drawer Toggle Script -->
+  <script>
+    (function() {
+      var menuBtn = document.getElementById('mobile-menu-btn');
+      var drawer = document.getElementById('mobile-menu-drawer');
+      var barsIcon = document.getElementById('menu-icon-bars');
+      var closeIcon = document.getElementById('menu-icon-close');
+
+      if (menuBtn && drawer) {
+        menuBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var isOpen = !drawer.classList.contains('hidden');
+          if (isOpen) {
+            drawer.classList.add('hidden');
+            barsIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+          } else {
+            drawer.classList.remove('hidden');
+            barsIcon.classList.add('hidden');
+            closeIcon.classList.remove('hidden');
+          }
+        });
+
+        var drawerLinks = drawer.querySelectorAll('.mobile-drawer-link');
+        drawerLinks.forEach(function(link) {
+          link.addEventListener('click', function() {
+            drawer.classList.add('hidden');
+            barsIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!drawer.contains(e.target) && !menuBtn.contains(e.target) && !drawer.classList.contains('hidden')) {
+            drawer.classList.add('hidden');
+            barsIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

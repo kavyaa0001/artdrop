@@ -137,7 +137,8 @@
       <nav class="hidden md:flex items-center gap-7 lg:gap-12 text-xs lg:text-sm font-extrabold uppercase tracking-[0.25em] text-black">
         <a href="/" class="hover:opacity-50 transition px-2 py-1">Home</a>
         <a href="/#galeria" class="hover:opacity-50 transition px-2 py-1">Gallery</a>
-        <a href="collection.html" class="px-3 py-1 rounded-full bg-black text-white hover:opacity-85 transition" style="background-color: #000000 !important; color: #ffffff !important;">Collection</a>
+        <a href="collection.html" class="px-3 py-1 rounded-full bg-black text-white hover:opacity-85 transition" style="background-color: #000000 !important; color: #ffffff !important;">PC Wallpapers</a>
+        <a href="mobile-wallpapers.html" class="hover:opacity-50 transition px-2 py-1">Mobile (Soon)</a>
         <a href="/#manifesto" class="hover:opacity-50 transition px-2 py-1">Manifesto</a>
         <a href="/#pack" class="hover:opacity-50 transition px-2 py-1">The Pack</a>
         <a href="/#faq" class="hover:opacity-50 transition px-2 py-1">FAQ</a>
@@ -163,8 +164,12 @@
         <a href="/" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black hover:text-neutral-500 border-b border-black/5">Home</a>
         <a href="/#galeria" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black hover:text-neutral-500 border-b border-black/5">Gallery</a>
         <a href="collection.html" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black bg-neutral-100 font-bold border-b border-black/5 flex items-center justify-center gap-2">
-          <span>Collection</span>
+          <span>PC Wallpapers</span>
           <span class="rounded-full bg-black px-2 py-0.5 text-[9px] font-bold text-white tracking-widest" style="background-color: #000000 !important; color: #ffffff !important;">VIEWING</span>
+        </a>
+        <a href="mobile-wallpapers.html" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black hover:text-neutral-500 border-b border-black/5 flex items-center justify-center gap-2">
+          <span>Mobile Wallpapers</span>
+          <span class="rounded-full bg-amber-400 px-2 py-0.5 text-[9px] font-bold text-black tracking-widest">SOON</span>
         </a>
         <a href="/#manifesto" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black hover:text-neutral-500 border-b border-black/5">Manifesto</a>
         <a href="/#pack" class="mobile-drawer-link py-3 text-xs font-black uppercase tracking-[0.25em] text-black hover:text-neutral-500 border-b border-black/5">The Pack</a>
@@ -204,8 +209,8 @@
            ======================================================================= -->
       <div class="mt-10 sm:mt-12 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-left max-w-3xl mx-auto">
         
-        <!-- Option 1: PC / Desktop Wallpapers (Default Active) -->
-        <div id="btn-select-pc" class="format-card active relative rounded-2xl border-2 border-black/15 p-6 sm:p-7 bg-white hover:border-black shadow-sm" role="button" tabindex="0" aria-label="Select PC Desktop Wallpapers">
+        <!-- Option 1: PC / Desktop Wallpapers (Active) -->
+        <a href="#pc-view" id="btn-select-pc" class="format-card active block relative rounded-2xl border-2 border-black/15 p-6 sm:p-7 bg-white hover:border-black shadow-sm no-underline" aria-label="Select PC Desktop Wallpapers">
           <div class="flex items-start justify-between">
             <div class="format-icon-bg h-12 w-12 rounded-xl bg-neutral-100 border border-black/10 flex items-center justify-center shrink-0">
               <!-- Desktop Monitor SVG -->
@@ -224,13 +229,13 @@
           </p>
 
           <div class="mt-5 flex items-center gap-2 text-xs font-black uppercase tracking-wider">
-            <span>View Desktop Artworks</span>
+            <span>View Desktop Artworks ↓</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
           </div>
-        </div>
+        </a>
 
-        <!-- Option 2: Mobile Phone Wallpapers -->
-        <div id="btn-select-mobile" class="format-card relative rounded-2xl border-2 border-black/15 p-6 sm:p-7 bg-white hover:border-black shadow-sm" role="button" tabindex="0" aria-label="Select Mobile Phone Wallpapers">
+        <!-- Option 2: Mobile Phone Wallpapers (Opens dedicated page) -->
+        <a href="mobile-wallpapers.html" id="btn-select-mobile" class="format-card block relative rounded-2xl border-2 border-black/15 p-6 sm:p-7 bg-white hover:border-black shadow-sm no-underline" aria-label="Open Mobile Phone Wallpapers Page">
           <div class="flex items-start justify-between">
             <div class="format-icon-bg h-12 w-12 rounded-xl bg-neutral-100 border border-black/10 flex items-center justify-center shrink-0">
               <!-- Smartphone SVG -->
@@ -249,11 +254,11 @@
             9:16 vertical crop with deep OLED blacks and focused impasto textures specially balanced for iPhone &amp; Android lock screens.
           </p>
 
-          <div class="mt-5 flex items-center gap-2 text-xs font-black uppercase tracking-wider">
-            <span>Check Mobile Status</span>
+          <div class="mt-5 flex items-center gap-2 text-xs font-black uppercase tracking-wider text-black">
+            <span>Open Mobile Page →</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
           </div>
-        </div>
+        </a>
 
       </div>
     </section>
@@ -571,76 +576,11 @@
           <a href="/#oferta" class="w-full sm:w-auto rounded-full bg-white text-black px-8 py-3.5 text-xs font-black uppercase tracking-widest shadow-lg hover:bg-neutral-200 transition cursor-pointer" style="background-color: #ffffff !important; color: #000000 !important;">
             <span style="color: #000000 !important;">Unlock PC Pack from ₹49</span>
           </a>
-          <button type="button" id="btn-trigger-mobile-switch" class="w-full sm:w-auto rounded-full border border-white/30 px-6 py-3.5 text-xs font-black uppercase tracking-widest text-white hover:bg-white/10 transition cursor-pointer">
-            Check Mobile Editions
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- =========================================================================
-         SECTION 2: MOBILE PHONE WALLPAPERS (AVAILABLE SOON)
-         ========================================================================= -->
-    <section id="mobile-view" class="hidden px-4 sm:px-6 py-12 max-w-4xl mx-auto text-center transition-opacity duration-300">
-      
-      <!-- Smartphone Mockup with Coming Soon Glow -->
-      <div class="relative mx-auto w-64 sm:w-72 aspect-[9/18] rounded-[42px] p-3 bg-neutral-900 border-4 border-neutral-800 shadow-2xl overflow-hidden">
-        
-        <!-- Screen Area -->
-        <div class="relative h-full w-full rounded-[32px] overflow-hidden bg-black flex flex-col items-center justify-between p-6">
-          
-          <!-- Mock Phone Notch / Island -->
-          <div class="h-4 w-24 rounded-full bg-neutral-800"></div>
-
-          <!-- Blurred Artwork Background -->
-          <img src="images/uploads/the-world-is-yours-globe.jpg" alt="ArtDrop Mobile" class="absolute inset-0 h-full w-full object-cover filter blur-[40px] opacity-35 scale-125">
-          
-          <!-- Centered Glowing Badge -->
-          <div class="relative z-10 my-auto text-center">
-            <div class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/80 backdrop-blur-md px-4 py-2 shadow-2xl">
-              <span class="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_12px_#fbbf24] animate-pulse"></span>
-              <span class="text-[11px] font-black uppercase tracking-[0.3em] text-white">AVAILABLE SOON</span>
-            </div>
-            
-            <p class="mt-4 text-xs font-serif-italic text-neutral-300 text-lg">9:16 Vertical Cut</p>
-            <p class="text-[10px] font-extrabold uppercase tracking-widest text-neutral-400 mt-1">OLED Impasto</p>
-          </div>
-
-          <!-- Bottom Phone Bar -->
-          <div class="h-1 w-28 rounded-full bg-white/40"></div>
-        </div>
-      </div>
-
-      <!-- Main Coming Soon Message -->
-      <div class="mt-8 max-w-xl mx-auto">
-        <div class="inline-flex items-center gap-2 rounded-full bg-amber-100 text-amber-900 px-3.5 py-1 text-[11px] font-black uppercase tracking-wider">
-          <span>Notice</span> • <span>Under Active Curation</span>
-        </div>
-
-        <h2 class="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight text-black">
-          Mobile Phone Wallpapers <br><span class="font-serif-italic text-neutral-600">Available Soon.</span>
-        </h2>
-
-        <p class="mt-4 text-sm sm:text-base text-neutral-600 leading-relaxed">
-          Hum smartphone screens ke liye custom <strong>9:16 vertical editions</strong> tayar kar rahe hain. Har vertical wallpaper mein thick impasto texture, deep OLED blacks, aur high-contrast lighting balance ki ja rahi hai taaki iPhone aur Android lock screen par best look mile.
-        </p>
-
-        <!-- Action Buttons -->
-        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <button type="button" id="btn-trigger-pc-switch" class="w-full sm:w-auto rounded-full bg-black text-white px-8 py-3.5 text-xs font-black uppercase tracking-widest shadow-xl hover:bg-neutral-800 transition cursor-pointer" style="background-color: #000000 !important; color: #ffffff !important;">
-            <span style="color: #ffffff !important;">← Explore PC Wallpapers (10 Available)</span>
-          </button>
-          
-          <a href="/#oferta" class="w-full sm:w-auto rounded-full border border-black/20 bg-white hover:bg-neutral-100 text-black px-6 py-3.5 text-xs font-black uppercase tracking-widest transition cursor-pointer">
-            Get Full Access (₹49)
+          <a href="mobile-wallpapers.html" class="w-full sm:w-auto rounded-full border border-white/30 px-6 py-3.5 text-xs font-black uppercase tracking-widest text-white hover:bg-white/10 transition cursor-pointer text-center">
+            Check Mobile Editions (Soon)
           </a>
         </div>
-
-        <p class="mt-4 text-xs text-neutral-400">
-          *Note: Jo users abhi complete collection lenge, unhe mobile pack release hote hi free update milega.
-        </p>
       </div>
-
     </section>
   </main>
 
@@ -710,52 +650,14 @@
        ========================================================================= -->
   <script>
     (function() {
-      // 1. Format Switching Logic
+      // 1. PC Wallpapers View Smooth Scroll
       var btnPc = document.getElementById('btn-select-pc');
-      var btnMobile = document.getElementById('btn-select-mobile');
       var pcView = document.getElementById('pc-view');
-      var mobileView = document.getElementById('mobile-view');
-      var triggerPcSwitch = document.getElementById('btn-trigger-pc-switch');
-      var triggerMobileSwitch = document.getElementById('btn-trigger-mobile-switch');
-
-      function showPc() {
-        btnPc.classList.add('active');
-        btnMobile.classList.remove('active');
-        pcView.classList.remove('hidden');
-        mobileView.classList.add('hidden');
-        window.history.replaceState(null, '', '#pc');
-      }
-
-      function showMobile() {
-        btnMobile.classList.add('active');
-        btnPc.classList.remove('active');
-        mobileView.classList.remove('hidden');
-        pcView.classList.add('hidden');
-        window.history.replaceState(null, '', '#mobile');
-      }
-
-      if (btnPc && btnMobile) {
-        btnPc.addEventListener('click', showPc);
-        btnMobile.addEventListener('click', showMobile);
-      }
-      if (triggerPcSwitch) {
-        triggerPcSwitch.addEventListener('click', function() {
-          showPc();
+      if (btnPc && pcView) {
+        btnPc.addEventListener('click', function(e) {
+          e.preventDefault();
           pcView.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
-      }
-      if (triggerMobileSwitch) {
-        triggerMobileSwitch.addEventListener('click', function() {
-          showMobile();
-          mobileView.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-      }
-
-      // Check URL hash on load
-      if (window.location.hash === '#mobile') {
-        showMobile();
-      } else {
-        showPc();
       }
 
       // 2. Category Filter for PC Wallpapers
