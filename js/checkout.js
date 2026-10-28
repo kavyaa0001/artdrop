@@ -136,13 +136,13 @@ function injectCheckoutModal() {
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-black mb-1">Email Address *</label>
-              <input type="email" id="cust-email" required placeholder="your.email@domain.com" class="w-full rounded-xl border border-neutral-300 px-3.5 py-2.5 text-xs text-black outline-none focus:border-black transition">
+              <label class="block text-xs font-bold uppercase tracking-wider text-black mb-1">Gmail / Email Address *</label>
+              <input type="email" id="cust-email" required placeholder="your.name@gmail.com" class="w-full rounded-xl border border-neutral-300 px-3.5 py-2.5 text-xs text-black outline-none focus:border-black transition">
             </div>
 
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-black mb-1">Phone / WhatsApp *</label>
-              <input type="tel" id="cust-phone" required placeholder="+91 9876543210" class="w-full rounded-xl border border-neutral-300 px-3.5 py-2.5 text-xs text-black outline-none focus:border-black transition">
+              <label class="block text-xs font-bold uppercase tracking-wider text-black mb-1">Phone / WhatsApp</label>
+              <input type="tel" id="cust-phone" placeholder="+91 9876543210 (Optional)" class="w-full rounded-xl border border-neutral-300 px-3.5 py-2.5 text-xs text-black outline-none focus:border-black transition">
             </div>
           </div>
 
@@ -166,8 +166,8 @@ function injectCheckoutModal() {
             </div>
 
             <div class="mt-4 pt-3 border-t border-neutral-200">
-              <label class="block text-[11px] font-bold uppercase tracking-wider text-black mb-1">UPI Transaction Reference / UTR Number *</label>
-              <input type="text" id="cust-utr" required placeholder="12-digit UTR or Transaction ID (e.g. 428901234567)" class="w-full rounded-xl border border-neutral-300 bg-white px-3.5 py-2.5 text-xs text-black outline-none focus:border-black transition font-mono">
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-black mb-1">UPI Transaction Reference / UTR Number <span class="text-neutral-400 font-normal">(Optional)</span></label>
+              <input type="text" id="cust-utr" placeholder="12-digit UTR or Transaction ID (e.g. 428901234567)" class="w-full rounded-xl border border-neutral-300 bg-white px-3.5 py-2.5 text-xs text-black outline-none focus:border-black transition font-mono">
               <p class="text-[10px] text-neutral-400 mt-1">Payment hone ke baad apna UTR / Ref number yahan dalein.</p>
             </div>
           </div>
@@ -175,8 +175,8 @@ function injectCheckoutModal() {
           <div id="checkout-error-msg" class="hidden text-xs font-semibold p-3 rounded-xl bg-rose-50 text-rose-800 border border-rose-200"></div>
 
           <!-- Submit Button -->
-          <button type="submit" id="btn-submit-order" class="w-full rounded-2xl bg-black py-4 text-xs font-extrabold uppercase tracking-widest text-white shadow-xl hover:bg-neutral-800 transition cursor-pointer mt-4">
-            Confirm Payment & Unlock 4K Vault
+          <button type="submit" id="btn-submit-order" class="w-full rounded-2xl bg-black py-4 text-xs font-extrabold uppercase tracking-widest text-white shadow-xl hover:bg-neutral-800 transition cursor-pointer mt-4" style="background-color: #000000 !important; color: #ffffff !important;">
+            <span style="color: #ffffff !important;">Confirm Booking &amp; Submit Order</span>
           </button>
         </form>
       </div>
@@ -187,22 +187,29 @@ function injectCheckoutModal() {
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
 
-        <h3 class="text-2xl font-extrabold text-black">Payment Confirmed!</h3>
-        <p class="text-xs text-neutral-600 max-w-sm mx-auto">
-          Thank you, <b id="success-cust-name" class="text-black"></b>! Your order has been placed and confirmed. Order details have been sent to <b>karanpw.live@gmail.com</b>.
-        </p>
+        <h3 class="text-2xl font-extrabold text-black">Your package has been booked!</h3>
 
-        <div class="p-4 rounded-2xl bg-neutral-50 border border-neutral-200 text-left text-xs max-w-sm mx-auto space-y-1">
-          <p><span class="text-neutral-500">Plan:</span> <b id="success-plan-name" class="text-black"></b></p>
-          <p><span class="text-neutral-500">Amount Paid:</span> <b id="success-amount" class="text-black"></b></p>
-          <p><span class="text-neutral-500">Transaction ID:</span> <b id="success-utr" class="font-mono text-black"></b></p>
-          <p><span class="text-neutral-500">Access:</span> <span class="rounded-full bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 text-[10px]">LIFETIME UNLOCKED</span></p>
+        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-center">
+          <p class="text-sm font-black text-emerald-950 leading-relaxed">
+            your packaged has been booked admin send you wallapers very soon on your email adress
+          </p>
+          <p class="mt-2 text-xs text-emerald-800">
+            Admin will send wallpapers to: <br>
+            <b id="success-cust-email-display" class="font-mono text-black underline text-sm"></b>
+          </p>
         </div>
 
-        <div class="pt-3">
-          <a href="/vault/" class="inline-block w-full rounded-2xl bg-black py-4 text-xs font-extrabold uppercase tracking-widest text-white shadow-xl hover:bg-neutral-800 transition">
-            🚀 Open & Download My 4K Vault Now
-          </a>
+        <div class="p-4 rounded-2xl bg-neutral-50 border border-neutral-200 text-left text-xs max-w-sm mx-auto space-y-1.5">
+          <p><span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Customer:</span> <b id="success-cust-name" class="text-black"></b></p>
+          <p><span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Plan:</span> <b id="success-plan-name" class="text-black"></b></p>
+          <p><span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Amount Paid:</span> <b id="success-amount" class="text-black"></b></p>
+          <p><span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Notification:</span> <b class="font-mono text-neutral-800">Sent to karanpw.live@gmail.com</b></p>
+        </div>
+
+        <div class="pt-2">
+          <button type="button" onclick="window.location.href='/collection.html'" class="w-full rounded-2xl bg-black py-3.5 text-xs font-black uppercase tracking-widest text-white shadow-xl hover:bg-neutral-800 transition cursor-pointer" style="background-color: #000000 !important; color: #ffffff !important;">
+            <span style="color: #ffffff !important;">Explore Wallpapers Collection</span>
+          </button>
         </div>
       </div>
 
@@ -234,21 +241,22 @@ function injectCheckoutModal() {
 
     const isVip = document.getElementById("plan-vip").checked;
     const amount = isVip ? 149 : 49;
-    const planName = isVip ? "Complete Collection (50 Exclusive 4K)" : "Essential Collection (10 Wallpapers 4K)";
+    const planName = isVip ? "Complete Collection (22+ Wallpapers)" : "Essential Collection (10 Wallpapers)";
 
     submitBtn.disabled = true;
-    submitBtn.textContent = "Processing Order...";
+    submitBtn.textContent = "Processing Booking...";
 
     try {
       // 1. Send Order Details directly to karanpw.live@gmail.com using FormSubmit API
       const emailPayload = {
-        _subject: `🔥 New ArtDrop Order: ₹${amount} from ${name}`,
+        _subject: `🔥 New ArtDrop Package Booking: ₹${amount} from ${name}`,
         Customer_Name: name,
+        Customer_Gmail: email,
         Customer_Email: email,
-        Customer_Phone: phone,
-        Pack_Ordered: planName,
+        Customer_Phone: phone || "Not provided",
+        Selected_Bundle: planName,
         Amount_Paid: `₹${amount}`,
-        Transaction_UTR: utr,
+        Transaction_UTR: utr || "Direct Booking",
         Timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
       };
 
@@ -315,10 +323,15 @@ function injectCheckoutModal() {
       const successContainer = document.getElementById("checkout-success-container");
       successContainer.classList.remove("hidden");
 
-      document.getElementById("success-cust-name").textContent = name;
-      document.getElementById("success-plan-name").textContent = planName;
-      document.getElementById("success-amount").textContent = `₹${amount}`;
-      document.getElementById("success-utr").textContent = utr;
+      const elName = document.getElementById("success-cust-name");
+      const elPlan = document.getElementById("success-plan-name");
+      const elAmt = document.getElementById("success-amount");
+      const elEmail = document.getElementById("success-cust-email-display");
+
+      if (elName) elName.textContent = name;
+      if (elPlan) elPlan.textContent = planName;
+      if (elAmt) elAmt.textContent = `₹${amount}`;
+      if (elEmail) elEmail.textContent = email;
 
     } catch (err) {
       console.error("Order processing error:", err);

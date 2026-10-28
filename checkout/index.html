@@ -1,12 +1,653 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>ArtDrop Checkout</title>
-  <meta http-equiv="refresh" content="0; url=essential.html">
-  <script>window.location.href = "essential.html";</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ArtDrop - Checkout & Payment | Choose Bundle</title>
+  <meta name="description" content="Select your ArtDrop wallpaper bundle, enter your name and Gmail, and receive your 4K artworks directly.">
+  <link rel="icon" href="../images/favicon.png?v=2" type="image/png">
+
+  <!-- Preload Fonts -->
+  <link rel="preload" href="../fonts/karla-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/cormorant-garamond-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin>
+
+  <style>
+    @font-face {
+      font-family: "Karla";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 200 800;
+      src: url("../fonts/karla-latin-wght-normal.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Cormorant Garamond";
+      font-style: italic;
+      font-display: swap;
+      font-weight: 300 700;
+      src: url("../fonts/cormorant-garamond-latin-wght-italic.woff2") format("woff2");
+    }
+  </style>
+
+  <!-- Tailwind Pre-compiled CSS -->
+  <link rel="stylesheet" href="../css/styles.css">
+
+  <style>
+    :root {
+      --background: #ffffff !important;
+      --foreground: #000000 !important;
+    }
+    body {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      font-family: "Karla", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .font-serif-italic {
+      font-family: "Cormorant Garamond", Georgia, serif !important;
+      font-style: italic;
+    }
+    .bundle-card {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+    .bundle-card.selected {
+      border-color: #000000 !important;
+      background-color: #fafafa !important;
+      box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+    .input-field {
+      width: 100%;
+      border-radius: 16px;
+      border: 1.5px solid rgba(0, 0, 0, 0.18);
+      background-color: #ffffff;
+      padding: 14px 18px;
+      font-size: 14px;
+      color: #000000;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .input-field:focus {
+      border-color: #000000;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+    }
+  </style>
 </head>
-<body>
-  <p>Redirecting to <a href="essential.html">Essential Checkout</a>...</p>
+<body class="min-h-screen bg-white text-black antialiased selection:bg-black selection:text-white flex flex-col justify-between">
+
+  <!-- =========================================================================
+       HEADER
+       ========================================================================= -->
+  <header class="border-b border-black/10 bg-white sticky top-0 z-40 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 py-4">
+      <a href="/" class="flex items-center gap-3">
+        <img src="../images/artdrop-logo.webp?v=2" alt="ArtDrop Wallpapers" class="h-10 sm:h-12 w-auto">
+      </a>
+      
+      <div class="flex items-center gap-4 text-xs font-bold">
+        <span class="hidden sm:inline-flex items-center gap-1.5 text-neutral-500 font-extrabold uppercase tracking-widest text-[11px]">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          256-Bit SSL Encrypted
+        </span>
+        <a href="/" class="rounded-full border border-black/15 bg-neutral-50 hover:bg-black hover:text-white px-4 py-2 text-black transition text-xs font-black uppercase tracking-wider">
+          ← Back to Site
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN CHECKOUT & PAYMENT FLOW
+       ========================================================================= -->
+  <main class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-12 w-full flex-grow">
+
+    <!-- Form Container -->
+    <div id="checkout-form-container">
+      
+      <!-- Headline & Introduction -->
+      <div class="text-center mb-8 sm:mb-12">
+        <div class="inline-flex items-center gap-2 rounded-full border border-black/15 bg-neutral-50 px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.3em] text-black mb-4">
+          <span class="h-2 w-2 rounded-full bg-black"></span>
+          <span>Instant Checkout • Select Your Bundle</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-black leading-tight">
+          Complete your <span class="font-serif-italic">wallpaper access.</span>
+        </h1>
+        
+        <p class="mt-3 text-sm sm:text-base text-neutral-600 max-w-xl mx-auto leading-relaxed">
+          Pehle apna bundle select karein, fir apna naam aur Gmail bharein. Aapka data verify hote hi admin aapko wallpapers email par bhej dega.
+        </p>
+      </div>
+
+      <form id="unified-checkout-form" class="space-y-10">
+
+        <!-- =====================================================================
+             STEP 1: BUNDLE SELECTION
+             ===================================================================== -->
+        <div>
+          <div class="flex items-center gap-3 mb-5 pb-3 border-b border-black/10">
+            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-black text-xs font-black text-white">1</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-black uppercase tracking-wider text-black">
+                Select Your Wallpaper Bundle
+              </h2>
+              <p class="text-xs text-neutral-500">Choose which package you want to book today</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            
+            <!-- Bundle 1: Essential Collection (₹49) -->
+            <label for="bundle-opt-essential" class="block cursor-pointer">
+              <input type="radio" name="bundle" id="bundle-opt-essential" value="essential" class="sr-only">
+              <div id="card-bundle-essential" class="bundle-card rounded-3xl border-2 border-black/15 bg-white p-6 sm:p-7 relative shadow-sm hover:border-black">
+                <div class="flex items-start justify-between">
+                  <div>
+                    <span class="rounded-full bg-neutral-100 border border-black/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-neutral-800">
+                      Standard Pack
+                    </span>
+                    <h3 class="text-xl sm:text-2xl font-bold tracking-tight text-black mt-3">
+                      Essential Collection
+                    </h3>
+                  </div>
+                  <div class="h-6 w-6 rounded-full border-2 border-neutral-300 flex items-center justify-center check-indicator">
+                    <span class="h-3 w-3 rounded-full bg-black hidden check-dot"></span>
+                  </div>
+                </div>
+
+                <div class="mt-4 flex items-baseline gap-1.5">
+                  <span class="text-4xl font-extrabold text-black">₹49</span>
+                  <span class="text-xs font-bold text-neutral-400 line-through">₹299</span>
+                  <span class="text-xs text-neutral-500 ml-1">One-time payment</span>
+                </div>
+
+                <ul class="mt-5 space-y-2.5 text-xs text-neutral-600 border-t border-black/10 pt-4">
+                  <li class="flex items-center gap-2">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-black shrink-0"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span><strong>10 Curated 4K Wallpapers</strong></span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-black shrink-0"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>High resolution impasto oil textures</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-black shrink-0"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>Direct high-speed delivery to your email</span>
+                  </li>
+                </ul>
+              </div>
+            </label>
+
+            <!-- Bundle 2: Complete Vault Collection (₹149) [Default Recommended] -->
+            <label for="bundle-opt-complete" class="block cursor-pointer">
+              <input type="radio" name="bundle" id="bundle-opt-complete" value="complete" checked class="sr-only">
+              <div id="card-bundle-complete" class="bundle-card selected rounded-3xl border-2 border-black bg-neutral-50/80 p-6 sm:p-7 relative shadow-md hover:border-black">
+                
+                <!-- Best Value Badge -->
+                <span class="absolute -top-3 right-6 rounded-full bg-black text-white px-3.5 py-1 text-[9px] font-black uppercase tracking-widest shadow-md" style="background-color: #000000 !important; color: #ffffff !important;">
+                  ★ MOST POPULAR • ALL-ACCESS
+                </span>
+
+                <div class="flex items-start justify-between">
+                  <div>
+                    <span class="rounded-full bg-amber-400 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-black">
+                      Lifetime VIP Access
+                    </span>
+                    <h3 class="text-xl sm:text-2xl font-bold tracking-tight text-black mt-3">
+                      Complete Collection
+                    </h3>
+                  </div>
+                  <div class="h-6 w-6 rounded-full border-2 border-black flex items-center justify-center check-indicator">
+                    <span class="h-3 w-3 rounded-full bg-black check-dot"></span>
+                  </div>
+                </div>
+
+                <div class="mt-4 flex items-baseline gap-1.5">
+                  <span class="text-4xl font-extrabold text-black">₹149</span>
+                  <span class="text-xs font-bold text-neutral-400 line-through">₹999</span>
+                  <span class="text-xs text-neutral-500 ml-1">One-time payment</span>
+                </div>
+
+                <ul class="mt-5 space-y-2.5 text-xs text-neutral-700 border-t border-black/10 pt-4">
+                  <li class="flex items-center gap-2 font-bold text-black">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-black shrink-0"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>All 22+ Masterpieces (Includes Larp & Heroes)</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-black shrink-0"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>9:16 vertical smartphone editions (Free when live)</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-black shrink-0"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>Ultra-wide 21:9 & 16:10 resolutions</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-black shrink-0"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>Instant delivery + All future drops free</span>
+                  </li>
+                </ul>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- =====================================================================
+             STEP 2: NAME & GMAIL DETAILS
+             ===================================================================== -->
+        <div>
+          <div class="flex items-center gap-3 mb-5 pb-3 border-b border-black/10">
+            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-black text-xs font-black text-white">2</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-black uppercase tracking-wider text-black">
+                Your Contact Information
+              </h2>
+              <p class="text-xs text-neutral-500">Apna naam aur Gmail address bharein jahan wallpapers bheje jayenge</p>
+            </div>
+          </div>
+
+          <div class="rounded-3xl border border-black/15 bg-white p-6 sm:p-8 shadow-sm space-y-5">
+            
+            <!-- Full Name -->
+            <div>
+              <label for="cust-name" class="block text-xs font-black uppercase tracking-wider text-black mb-2">
+                Full Name *
+              </label>
+              <input type="text" id="cust-name" name="Customer_Name" required placeholder="e.g. Karan Sharma" class="input-field">
+            </div>
+
+            <!-- Gmail / Email -->
+            <div>
+              <label for="cust-email" class="block text-xs font-black uppercase tracking-wider text-black mb-2">
+                Gmail / Email Address *
+              </label>
+              <input type="email" id="cust-email" name="Customer_Email" required placeholder="your.name@gmail.com" class="input-field">
+              <p class="text-[11px] text-neutral-500 mt-1.5 flex items-center gap-1.5">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <span>Admin is email address par aapke 4K wallpapers bhejega.</span>
+              </p>
+            </div>
+
+            <!-- Mobile / WhatsApp (Optional) -->
+            <div>
+              <label for="cust-phone" class="block text-xs font-black uppercase tracking-wider text-black mb-2">
+                Mobile / WhatsApp Number <span class="text-neutral-400 font-normal">(Optional)</span>
+              </label>
+              <input type="tel" id="cust-phone" name="Customer_Phone" placeholder="+91 9876543210" class="input-field">
+              <p class="text-[11px] text-neutral-400 mt-1">For instant dispatch WhatsApp update.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- =====================================================================
+             STEP 3: SCAN & PAY VIA UPI
+             ===================================================================== -->
+        <div>
+          <div class="flex items-center gap-3 mb-5 pb-3 border-b border-black/10">
+            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-black text-xs font-black text-white">3</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-black uppercase tracking-wider text-black">
+                Scan &amp; Pay via UPI
+              </h2>
+              <p class="text-xs text-neutral-500">Scan QR code or pay directly using any UPI app</p>
+            </div>
+          </div>
+
+          <div class="rounded-3xl border border-black/15 bg-neutral-50 p-6 sm:p-8 space-y-6">
+            
+            <!-- Summary Bar -->
+            <div class="flex items-center justify-between border-b border-black/10 pb-4">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-neutral-500">Selected Bundle:</span>
+                <p id="summary-bundle-name" class="text-sm sm:text-base font-extrabold text-black">Complete Collection (22+ Artworks)</p>
+              </div>
+              <div class="text-right">
+                <span class="text-xs font-bold uppercase tracking-wider text-neutral-500">Total Payable:</span>
+                <p id="summary-bundle-price" class="text-2xl sm:text-3xl font-black text-black">₹149</p>
+              </div>
+            </div>
+
+            <!-- QR Code & UPI Instructions -->
+            <div class="flex flex-col sm:flex-row items-center gap-6 pt-2">
+              
+              <!-- Dynamic QR Box -->
+              <div class="bg-white p-3.5 rounded-2xl border border-black/15 shadow-sm shrink-0 text-center">
+                <img id="upi-qr-image" src="" alt="Scan & Pay UPI QR" class="h-40 w-40 object-contain mx-auto">
+                <span class="block text-[10px] font-black uppercase tracking-widest text-neutral-400 mt-2">Scan with any UPI App</span>
+              </div>
+
+              <!-- Payment Details -->
+              <div class="space-y-3 text-center sm:text-left flex-grow">
+                <div>
+                  <p class="text-xs font-black uppercase tracking-wider text-black">Supported UPI Apps:</p>
+                  <p class="text-xs text-neutral-600 mt-0.5 font-medium">Google Pay • PhonePe • Paytm • BHIM • Cred • Amazon Pay</p>
+                </div>
+
+                <div class="pt-1">
+                  <p class="text-xs font-black uppercase tracking-wider text-black mb-1.5">Direct UPI ID:</p>
+                  <div class="inline-flex items-center gap-2.5 bg-white px-3.5 py-2 rounded-xl border border-black/20 shadow-xs">
+                    <span id="upi-id-display" class="font-mono font-bold text-black select-all text-sm">karanpw.live@oksbi</span>
+                    <button type="button" id="btn-copy-upi" class="rounded-md bg-black text-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider hover:bg-neutral-800 transition cursor-pointer" style="background-color: #000000 !important; color: #ffffff !important;">
+                      Copy
+                    </button>
+                  </div>
+                </div>
+
+                <p class="text-xs text-neutral-500 leading-relaxed">
+                  UPI se payment karne ke baad niche apna 12-digit UTR ya Transaction ID dalein taaki instant match ho sake.
+                </p>
+              </div>
+
+            </div>
+
+            <!-- UTR Input -->
+            <div class="pt-3 border-t border-black/10">
+              <label for="cust-utr" class="block text-xs font-black uppercase tracking-wider text-black mb-2">
+                UPI Reference / UTR Number <span class="text-neutral-400 font-normal">(Optional / Recommended)</span>
+              </label>
+              <input type="text" id="cust-utr" name="Transaction_UTR" placeholder="e.g. 12-digit UTR (428901234567) or Screenshot Ref" class="input-field font-mono">
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Error Notification Box -->
+        <div id="checkout-error-box" class="hidden text-xs font-bold p-4 rounded-2xl bg-rose-50 text-rose-800 border border-rose-200 text-center"></div>
+
+        <!-- Submit Button -->
+        <div class="pt-2">
+          <button type="submit" id="btn-submit-order" class="w-full rounded-full bg-black py-4 sm:py-5 text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-white shadow-2xl hover:bg-neutral-800 hover:scale-[1.01] transition cursor-pointer flex items-center justify-center gap-3" style="background-color: #000000 !important; color: #ffffff !important;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span id="btn-submit-label" style="color: #ffffff !important;">Book Package Now (₹149)</span>
+          </button>
+          
+          <p class="text-center text-[11px] text-neutral-400 mt-3">
+            🔒 Safe &amp; Secure. Your booking details will be sent directly to <strong>karanpw.live@gmail.com</strong>.
+          </p>
+        </div>
+
+      </form>
+
+    </div>
+
+    <!-- =========================================================================
+         SUCCESS VIEW (Displays exactly as requested by user)
+         ========================================================================= -->
+    <div id="checkout-success-view" class="hidden max-w-xl mx-auto my-6 sm:my-10">
+      <div class="rounded-3xl border border-black/15 bg-white p-7 sm:p-10 text-center space-y-6 shadow-2xl">
+        
+        <!-- Big Celebration Icon -->
+        <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-800 shadow-sm">
+          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+
+        <!-- Main Confirmation Message -->
+        <div>
+          <span class="inline-block rounded-full bg-emerald-100 text-emerald-800 px-4 py-1 text-[11px] font-black uppercase tracking-wider mb-3">
+            ✓ Booking Confirmed &amp; Details Sent
+          </span>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-black tracking-tight leading-snug">
+            Your package has been booked!
+          </h2>
+          
+          <!-- Exact requested confirmation statement -->
+          <div class="mt-5 p-5 rounded-2xl bg-emerald-50 border border-emerald-200 shadow-sm text-center">
+            <p class="text-base sm:text-lg font-black text-emerald-950 leading-relaxed">
+              your packaged has been booked admin send you wallapers very soon on your email adress
+            </p>
+            <p class="mt-2 text-xs text-emerald-800">
+              Admin will send your 4K wallpapers very soon to: <br>
+              <strong id="success-email-display" class="font-mono font-bold text-black underline text-sm"></strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- Summary Details Card -->
+        <div class="rounded-2xl border border-neutral-200 bg-neutral-50/70 p-5 text-left text-xs space-y-2.5">
+          <div class="flex justify-between border-b border-neutral-200 pb-2">
+            <span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Customer Name:</span>
+            <span id="res-cust-name" class="font-extrabold text-black"></span>
+          </div>
+          <div class="flex justify-between border-b border-neutral-200 pb-2">
+            <span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Gmail / Email:</span>
+            <span id="res-cust-email" class="font-mono font-bold text-black"></span>
+          </div>
+          <div class="flex justify-between border-b border-neutral-200 pb-2">
+            <span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Selected Package:</span>
+            <span id="res-cust-bundle" class="font-extrabold text-black"></span>
+          </div>
+          <div class="flex justify-between border-b border-neutral-200 pb-2">
+            <span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Amount:</span>
+            <span id="res-cust-amount" class="font-black text-black"></span>
+          </div>
+          <div class="flex justify-between pt-1">
+            <span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Notification Sent To:</span>
+            <span class="font-mono font-bold text-neutral-800">karanpw.live@gmail.com</span>
+          </div>
+        </div>
+
+        <!-- Action Links -->
+        <div class="space-y-3 pt-3">
+          <a href="/collection.html" class="block w-full rounded-full bg-black py-4 text-xs font-black uppercase tracking-[0.2em] text-white shadow-xl hover:bg-neutral-800 transition text-center" style="background-color: #000000 !important; color: #ffffff !important;">
+            <span style="color: #ffffff !important;">← Explore Collection (22 Artworks)</span>
+          </a>
+          <a href="/" class="block text-xs font-bold text-neutral-500 hover:text-black uppercase tracking-wider py-1 text-center">
+            Return to Homepage
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="border-t border-black/10 bg-white py-6 text-center text-xs text-neutral-500">
+    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p>© 2026 ArtDrop Wallpapers. All rights reserved.</p>
+      <p class="font-mono">Order Support: karanpw.live@gmail.com</p>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       JAVASCRIPT: Dynamic Bundle Selection, UPI & Email Notification
+       ========================================================================= -->
+  <script>
+    (function() {
+      const NOTIFY_EMAIL = "karanpw.live@gmail.com";
+      const UPI_ID = "karanpw.live@oksbi";
+
+      const cardEssential = document.getElementById("card-bundle-essential");
+      const cardComplete = document.getElementById("card-bundle-complete");
+      const radioEssential = document.getElementById("bundle-opt-essential");
+      const radioComplete = document.getElementById("bundle-opt-complete");
+
+      const summaryName = document.getElementById("summary-bundle-name");
+      const summaryPrice = document.getElementById("summary-bundle-price");
+      const btnLabel = document.getElementById("btn-submit-label");
+      const qrImage = document.getElementById("upi-qr-image");
+      const upiIdDisplay = document.getElementById("upi-id-display");
+      const btnCopyUpi = document.getElementById("btn-copy-upi");
+
+      // Check URL params for pre-selected bundle (?bundle=essential or ?bundle=complete)
+      const urlParams = new URLSearchParams(window.location.search);
+      const preBundle = urlParams.get("bundle");
+      if (preBundle === "essential") {
+        radioEssential.checked = true;
+      } else {
+        radioComplete.checked = true;
+      }
+
+      function updateBundleUI() {
+        const isComplete = radioComplete.checked;
+        const amount = isComplete ? 149 : 49;
+        const bundleTitle = isComplete ? "Complete Collection (22+ Artworks)" : "Essential Collection (10 Wallpapers)";
+
+        // Style Cards
+        if (isComplete) {
+          cardComplete.classList.add("selected", "border-black", "bg-neutral-50/80");
+          cardComplete.querySelector(".check-dot").classList.remove("hidden");
+          cardComplete.querySelector(".check-indicator").classList.add("border-black");
+
+          cardEssential.classList.remove("selected", "border-black", "bg-neutral-50/80");
+          cardEssential.querySelector(".check-dot").classList.add("hidden");
+          cardEssential.querySelector(".check-indicator").classList.remove("border-black");
+        } else {
+          cardEssential.classList.add("selected", "border-black", "bg-neutral-50/80");
+          cardEssential.querySelector(".check-dot").classList.remove("hidden");
+          cardEssential.querySelector(".check-indicator").classList.add("border-black");
+
+          cardComplete.classList.remove("selected", "border-black", "bg-neutral-50/80");
+          cardComplete.querySelector(".check-dot").classList.add("hidden");
+          cardComplete.querySelector(".check-indicator").classList.remove("border-black");
+        }
+
+        // Update Summary & Button Text
+        if (summaryName) summaryName.textContent = bundleTitle;
+        if (summaryPrice) summaryPrice.textContent = `₹${amount}`;
+        if (btnLabel) btnLabel.textContent = `Book Package Now (₹${amount})`;
+
+        // Generate UPI QR Code URL
+        const upiPayload = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=ArtDrop%20Wallpapers&am=${amount}&cu=INR&tn=${encodeURIComponent(bundleTitle)}`;
+        if (qrImage) {
+          qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiPayload)}`;
+        }
+      }
+
+      // Event Listeners for Radios & Cards
+      radioEssential.addEventListener("change", updateBundleUI);
+      radioComplete.addEventListener("change", updateBundleUI);
+
+      cardEssential.addEventListener("click", function() {
+        radioEssential.checked = true;
+        updateBundleUI();
+      });
+
+      cardComplete.addEventListener("click", function() {
+        radioComplete.checked = true;
+        updateBundleUI();
+      });
+
+      // Copy UPI Button
+      if (btnCopyUpi) {
+        btnCopyUpi.addEventListener("click", function() {
+          navigator.clipboard.writeText(UPI_ID).then(function() {
+            btnCopyUpi.textContent = "COPIED!";
+            setTimeout(function() { btnCopyUpi.textContent = "COPY"; }, 1500);
+          });
+        });
+      }
+
+      // Initialize on load
+      updateBundleUI();
+
+      // Form Submission
+      const form = document.getElementById("unified-checkout-form");
+      const submitBtn = document.getElementById("btn-submit-order");
+      const errorBox = document.getElementById("checkout-error-box");
+      const formContainer = document.getElementById("checkout-form-container");
+      const successView = document.getElementById("checkout-success-view");
+
+      form.addEventListener("submit", async function(e) {
+        e.preventDefault();
+        errorBox.classList.add("hidden");
+
+        const name = document.getElementById("cust-name").value.trim();
+        const email = document.getElementById("cust-email").value.trim();
+        const phone = document.getElementById("cust-phone").value.trim();
+        const utr = document.getElementById("cust-utr").value.trim();
+
+        if (!name || !email) {
+          errorBox.textContent = "Kripya apna naam aur Gmail address zaroor bharein.";
+          errorBox.classList.remove("hidden");
+          return;
+        }
+
+        const isComplete = radioComplete.checked;
+        const amount = isComplete ? 149 : 49;
+        const bundleTitle = isComplete ? "Complete All-Access Vault Collection (22+ Artworks)" : "Essential Collection (10 Wallpapers)";
+        const orderTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+
+        submitBtn.disabled = true;
+        btnLabel.textContent = "Booking your package...";
+
+        try {
+          // 1. Direct Email to karanpw.live@gmail.com using FormSubmit API
+          const emailPayload = {
+            _subject: `🔥 New ArtDrop Package Booking: ₹${amount} from ${name}`,
+            Customer_Name: name,
+            Customer_Gmail: email,
+            Customer_Phone: phone || "Not provided",
+            Selected_Bundle: bundleTitle,
+            Amount_Paid: `₹${amount}`,
+            Transaction_UTR: utr || "Pending / Direct Booking",
+            Booking_Status: "Booked - Wallpapers Pending Dispatch",
+            Order_Date_IST: orderTime
+          };
+
+          try {
+            await fetch(`https://formsubmit.co/ajax/${NOTIFY_EMAIL}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+              },
+              body: JSON.stringify(emailPayload)
+            });
+            console.log(`[ArtDrop] Booking details sent to ${NOTIFY_EMAIL}`);
+          } catch (mailErr) {
+            console.warn("Mail dispatch notice:", mailErr);
+          }
+
+          // 2. Save directly to Local Database (/api/orders)
+          try {
+            await fetch("/api/orders", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                customerName: name,
+                customerEmail: email,
+                customerPhone: phone,
+                packType: bundleTitle,
+                packPrice: amount,
+                transactionUtr: utr || "Direct Booking",
+                status: "Booked",
+                timestamp: Date.now()
+              })
+            });
+          } catch (dbErr) {
+            console.warn("Local DB notice:", dbErr);
+          }
+
+          // 3. Save customer details locally
+          localStorage.setItem("artdrop_customer_name", name);
+          localStorage.setItem("artdrop_customer_email", email);
+          localStorage.setItem("artdrop_customer_bundle", bundleTitle);
+
+          // 4. Populate and Show Success View
+          document.getElementById("res-cust-name").textContent = name;
+          document.getElementById("res-cust-email").textContent = email;
+          document.getElementById("res-cust-bundle").textContent = bundleTitle;
+          document.getElementById("res-cust-amount").textContent = `₹${amount}`;
+          document.getElementById("success-email-display").textContent = email;
+
+          formContainer.classList.add("hidden");
+          successView.classList.remove("hidden");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
+        } catch (err) {
+          console.error("Booking error:", err);
+          errorBox.textContent = "Error: " + err.message;
+          errorBox.classList.remove("hidden");
+          submitBtn.disabled = false;
+          btnLabel.textContent = `Book Package Now (₹${amount})`;
+        }
+      });
+    })();
+  </script>
+
 </body>
 </html>
