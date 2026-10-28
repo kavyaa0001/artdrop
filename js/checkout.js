@@ -63,23 +63,15 @@ function updateSelectedPlanUI() {
 
   const amountDisplay = document.getElementById("checkout-total-amount");
   const planNameDisplay = document.getElementById("checkout-plan-name");
-  const qrImage = document.getElementById("checkout-upi-qr");
   const upiIdDisplay = document.getElementById("checkout-upi-id");
 
   const amount = isVip ? 149 : 49;
-  const planName = isVip ? "Complete Collection (50 Exclusive 4K)" : "Essential Collection (10 Wallpapers 4K)";
+  const planName = isVip ? "Complete Collection (22+ Artworks)" : "Essential Collection (10 Wallpapers)";
   const upiId = "karanpw.live@oksbi";
 
   if (amountDisplay) amountDisplay.textContent = `₹${amount}`;
   if (planNameDisplay) planNameDisplay.textContent = planName;
   if (upiIdDisplay) upiIdDisplay.textContent = upiId;
-
-  // Generate UPI QR Code URL
-  // upi://pay?pa=karanpw.live@oksbi&pn=ArtDrop%20Wallpapers&am=1499&cu=INR
-  const upiPayload = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=ArtDrop%20Wallpapers&am=${amount}&cu=INR&tn=${encodeURIComponent(planName)}`;
-  if (qrImage) {
-    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiPayload)}`;
-  }
 }
 
 function injectCheckoutModal() {
@@ -128,7 +120,7 @@ function injectCheckoutModal() {
         </div>
 
         <!-- Customer Details Form -->
-        <form id="checkout-payment-form" class="space-y-4">
+        <form id="checkout-payment-form" novalidate class="space-y-4">
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-black mb-1">Full Name *</label>
             <input type="text" id="cust-name" required placeholder="e.g. Karan Sharma" class="w-full rounded-xl border border-neutral-300 px-3.5 py-2.5 text-xs text-black outline-none focus:border-black transition">
@@ -146,29 +138,30 @@ function injectCheckoutModal() {
             </div>
           </div>
 
-          <!-- Payment Instructions (UPI & QR) -->
-          <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 mt-4">
-            <div class="flex items-center justify-between mb-3 border-b border-neutral-200 pb-2">
-              <span class="text-xs font-bold uppercase tracking-wider text-black">Scan & Pay via UPI</span>
+          <!-- Payment Instructions (Direct UPI, Scanner Barcode Removed) -->
+          <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 mt-4 space-y-3">
+            <div class="flex items-center justify-between border-b border-neutral-200 pb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-black">Pay via UPI</span>
               <span id="checkout-total-amount" class="text-lg font-extrabold text-black">₹149</span>
             </div>
 
-            <div class="flex flex-col sm:flex-row items-center gap-4">
-              <div class="bg-white p-2 rounded-xl border border-neutral-200 shadow-sm shrink-0">
-                <img id="checkout-upi-qr" src="" alt="Scan & Pay QR" class="h-32 w-32 object-contain mx-auto">
-              </div>
-
-              <div class="text-center sm:text-left text-xs space-y-1.5">
-                <p class="font-bold text-black">Google Pay / PhonePe / Paytm / BHIM</p>
-                <p class="text-neutral-500 text-[11px]">UPI ID: <span id="checkout-upi-id" class="font-mono font-bold text-black select-all bg-white px-2 py-0.5 rounded border border-neutral-200">karanpw.live@oksbi</span></p>
-                <p class="text-[10px] text-neutral-400">Scan QR Code or pay directly to the UPI ID above.</p>
+            <div class="bg-white p-3 rounded-xl border border-neutral-200 shadow-xs">
+              <span class="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1">Direct UPI ID:</span>
+              <div class="flex items-center justify-between gap-2">
+                <span id="checkout-upi-id" class="font-mono text-sm font-black text-black select-all">karanpw.live@oksbi</span>
+                <button type="button" id="btn-modal-copy-upi" class="rounded-lg bg-black text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider hover:bg-neutral-800 transition cursor-pointer" style="background-color: #000000 !important; color: #ffffff !important;">
+                  Copy
+                </button>
               </div>
             </div>
 
-            <div class="mt-4 pt-3 border-t border-neutral-200">
+            <p class="text-[11px] text-neutral-500">
+              Supported Apps: Google Pay • PhonePe • Paytm • BHIM
+            </p>
+
+            <div class="pt-2 border-t border-neutral-200">
               <label class="block text-[11px] font-bold uppercase tracking-wider text-black mb-1">UPI Transaction Reference / UTR Number <span class="text-neutral-400 font-normal">(Optional)</span></label>
               <input type="text" id="cust-utr" placeholder="12-digit UTR or Transaction ID (e.g. 428901234567)" class="w-full rounded-xl border border-neutral-300 bg-white px-3.5 py-2.5 text-xs text-black outline-none focus:border-black transition font-mono">
-              <p class="text-[10px] text-neutral-400 mt-1">Payment hone ke baad apna UTR / Ref number yahan dalein.</p>
             </div>
           </div>
 
@@ -226,119 +219,137 @@ function injectCheckoutModal() {
     radio.addEventListener("change", updateSelectedPlanUI);
   });
 
+  const btnModalCopy = document.getElementById("btn-modal-copy-upi");
+  if (btnModalCopy) {
+    btnModalCopy.addEventListener("click", () => {
+      navigator.clipboard.writeText("karanpw.live@oksbi").then(() => {
+        btnModalCopy.textContent = "COPIED!";
+        setTimeout(() => { btnModalCopy.textContent = "COPY"; }, 1800);
+      });
+    });
+  }
+
   const form = document.getElementById("checkout-payment-form");
   const submitBtn = document.getElementById("btn-submit-order");
   const errorMsg = document.getElementById("checkout-error-msg");
+  const formContainer = document.getElementById("checkout-form-container");
+  const successContainer = document.getElementById("checkout-success-container");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  function processModalBooking(e) {
+    if (e) e.preventDefault();
     errorMsg.classList.add("hidden");
 
-    const name = document.getElementById("cust-name").value.trim();
-    const email = document.getElementById("cust-email").value.trim();
-    const phone = document.getElementById("cust-phone").value.trim();
-    const utr = document.getElementById("cust-utr").value.trim();
+    const inputName = document.getElementById("cust-name");
+    const inputEmail = document.getElementById("cust-email");
+    const inputPhone = document.getElementById("cust-phone");
+    const inputUtr = document.getElementById("cust-utr");
+
+    const name = inputName.value.trim();
+    const email = inputEmail.value.trim();
+    const phone = inputPhone.value.trim();
+    const utr = inputUtr.value.trim();
+
+    if (!name) {
+      errorMsg.textContent = "Kripya apna Full Name zaroor bharein.";
+      errorMsg.classList.remove("hidden");
+      inputName.focus();
+      return;
+    }
+
+    if (!email || !email.includes("@")) {
+      errorMsg.textContent = "Kripya apna valid Gmail ya Email address bharein.";
+      errorMsg.classList.remove("hidden");
+      inputEmail.focus();
+      return;
+    }
 
     const isVip = document.getElementById("plan-vip").checked;
     const amount = isVip ? 149 : 49;
-    const planName = isVip ? "Complete Collection (22+ Wallpapers)" : "Essential Collection (10 Wallpapers)";
+    const planName = isVip ? "Complete Collection (22+ Artworks)" : "Essential Collection (10 Wallpapers)";
+    const orderTime = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Processing Booking...";
+    // 1. INSTANT SUCCESS DISPLAY (No blocking)
+    formContainer.classList.add("hidden");
+    successContainer.classList.remove("hidden");
+
+    const elName = document.getElementById("success-cust-name");
+    const elPlan = document.getElementById("success-plan-name");
+    const elAmt = document.getElementById("success-amount");
+    const elEmail = document.getElementById("success-cust-email-display");
+
+    if (elName) elName.textContent = name;
+    if (elPlan) elPlan.textContent = planName;
+    if (elAmt) elAmt.textContent = `₹${amount}`;
+    if (elEmail) elEmail.textContent = email;
+
+    // 2. Save in localStorage
+    localStorage.setItem("artdrop_guest_user", "true");
+    localStorage.setItem("artdrop_customer_email", email);
+    localStorage.setItem("artdrop_customer_name", name);
+
+    // 3. Send Email to karanpw.live@gmail.com in Background (Non-blocking)
+    const emailPayload = {
+      _subject: `🔥 New ArtDrop Package Booking: ₹${amount} from ${name}`,
+      Customer_Name: name,
+      Customer_Gmail: email,
+      Customer_Email: email,
+      Customer_Phone: phone || "Not provided",
+      Selected_Bundle: planName,
+      Amount_Paid: `₹${amount}`,
+      Transaction_UTR: utr || "Direct Booking",
+      Timestamp: orderTime
+    };
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+    fetch(`https://formsubmit.co/ajax/${NOTIFY_EMAIL}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(emailPayload),
+      signal: controller.signal
+    }).catch(err => console.warn("[ArtDrop] Email notice:", err.message))
+      .finally(() => clearTimeout(timeoutId));
+
+    // 4. Save to Local DB in Background
+    fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customerName: name,
+        customerEmail: email,
+        customerPhone: phone,
+        packType: planName,
+        packPrice: amount,
+        transactionUtr: utr || "Direct Booking",
+        timestamp: Date.now()
+      })
+    }).catch(err => console.warn("[ArtDrop] Local DB notice:", err.message));
 
     try {
-      // 1. Send Order Details directly to karanpw.live@gmail.com using FormSubmit API
-      const emailPayload = {
-        _subject: `🔥 New ArtDrop Package Booking: ₹${amount} from ${name}`,
-        Customer_Name: name,
-        Customer_Gmail: email,
-        Customer_Email: email,
-        Customer_Phone: phone || "Not provided",
-        Selected_Bundle: planName,
-        Amount_Paid: `₹${amount}`,
-        Transaction_UTR: utr || "Direct Booking",
-        Timestamp: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-      };
+      addDoc(collection(db, "orders"), {
+        customerName: name,
+        customerEmail: email,
+        customerPhone: phone,
+        packType: planName,
+        amount: amount,
+        currency: "INR",
+        transactionUtr: utr || "Direct Booking",
+        status: "booked",
+        createdAt: serverTimestamp()
+      }).catch(err => console.warn("Firestore notice:", err.message));
+    } catch (fErr) {
+      console.warn("Firestore init warning:", fErr.message);
+    }
+  }
 
-      try {
-        await fetch(`https://formsubmit.co/ajax/${NOTIFY_EMAIL}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify(emailPayload)
-        });
-        console.log(`[ArtDrop] Notification sent to ${NOTIFY_EMAIL}`);
-      } catch (err) {
-        console.warn("Email notice:", err);
-      }
-
-      // 2. Save Order to Database (Local Server API + Firestore)
-      try {
-        await fetch("/api/orders", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            customerName: name,
-            customerEmail: email,
-            customerPhone: phone,
-            packType: planName,
-            packPrice: amount,
-            transactionUtr: utr,
-            timestamp: Date.now()
-          })
-        });
-      } catch (err) {
-        console.warn("Local order save notice:", err);
-      }
-
-      try {
-        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 1000));
-        await Promise.race([
-          addDoc(collection(db, "orders"), {
-            customerName: name,
-            customerEmail: email,
-            customerPhone: phone,
-            packType: planName,
-            amount: amount,
-            currency: "INR",
-            transactionUtr: utr,
-            status: "completed",
-            createdAt: serverTimestamp()
-          }),
-          timeoutPromise
-        ]);
-      } catch (err) {
-        console.warn("Firestore order record warning:", err);
-      }
-
-      // 3. Unlock Customer VIP Vault in this browser
-      localStorage.setItem("artdrop_guest_user", "true");
-      localStorage.setItem("artdrop_customer_email", email);
-      localStorage.setItem("artdrop_customer_name", name);
-
-      // 4. Show Celebration Success Screen
-      document.getElementById("checkout-form-container").classList.add("hidden");
-      const successContainer = document.getElementById("checkout-success-container");
-      successContainer.classList.remove("hidden");
-
-      const elName = document.getElementById("success-cust-name");
-      const elPlan = document.getElementById("success-plan-name");
-      const elAmt = document.getElementById("success-amount");
-      const elEmail = document.getElementById("success-cust-email-display");
-
-      if (elName) elName.textContent = name;
-      if (elPlan) elPlan.textContent = planName;
-      if (elAmt) elAmt.textContent = `₹${amount}`;
-      if (elEmail) elEmail.textContent = email;
-
-    } catch (err) {
-      console.error("Order processing error:", err);
-      errorMsg.textContent = "Order error: " + err.message;
-      errorMsg.classList.remove("hidden");
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Confirm Payment & Unlock 4K Vault";
+  form.addEventListener("submit", processModalBooking);
+  submitBtn.addEventListener("click", (e) => {
+    if (!formContainer.classList.contains("hidden")) {
+      processModalBooking(e);
     }
   });
 }
