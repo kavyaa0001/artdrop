@@ -63,15 +63,14 @@ function updateSelectedPlanUI() {
 
   const amountDisplay = document.getElementById("checkout-total-amount");
   const planNameDisplay = document.getElementById("checkout-plan-name");
-  const upiIdDisplay = document.getElementById("checkout-upi-id");
+  const btnLabel = document.getElementById("btn-modal-submit-label");
 
   const amount = isVip ? 149 : 49;
   const planName = isVip ? "Complete Collection (22+ Artworks)" : "Essential Collection (10 Wallpapers)";
-  const upiId = "karanpw.live@oksbi";
 
   if (amountDisplay) amountDisplay.textContent = `₹${amount}`;
   if (planNameDisplay) planNameDisplay.textContent = planName;
-  if (upiIdDisplay) upiIdDisplay.textContent = upiId;
+  if (btnLabel) btnLabel.textContent = `Book Package Now (₹${amount})`;
 }
 
 function injectCheckoutModal() {
@@ -93,12 +92,12 @@ function injectCheckoutModal() {
         <!-- Brand Header -->
         <div class="text-center mb-6">
           <img src="images/artdrop-logo.webp?v=2" alt="ArtDrop" class="mx-auto h-12 w-auto mb-2">
-          <h2 class="text-2xl font-extrabold tracking-tight text-black">Instant Secure Checkout</h2>
-          <p class="text-xs text-neutral-500 mt-1">Direct 4K Vault Download & Lifetime Access</p>
+          <h2 class="text-2xl font-extrabold tracking-tight text-black">Book Wallpaper Package</h2>
+          <p class="text-xs text-neutral-500 mt-1">Direct 4K delivery to your Gmail address</p>
         </div>
 
         <!-- Plan Selection Toggle -->
-        <div class="grid grid-cols-2 gap-3 mb-6">
+        <div class="grid grid-cols-2 gap-3 mb-5">
           <label class="cursor-pointer">
             <input type="radio" name="checkout-plan" id="plan-essential" value="essential" class="peer sr-only">
             <div class="rounded-2xl border-2 border-neutral-200 p-3.5 text-center peer-checked:border-black peer-checked:bg-neutral-50 transition">
@@ -111,10 +110,10 @@ function injectCheckoutModal() {
           <label class="cursor-pointer">
             <input type="radio" name="checkout-plan" id="plan-vip" value="vip" checked class="peer sr-only">
             <div class="rounded-2xl border-2 border-neutral-200 p-3.5 text-center peer-checked:border-black peer-checked:bg-neutral-50 transition relative">
-              <span class="absolute -top-2.5 right-2 rounded-full bg-black px-2 py-0.5 text-[8px] font-bold text-white uppercase">Best Value</span>
+              <span class="absolute -top-2.5 right-2 rounded-full bg-black px-2 py-0.5 text-[8px] font-bold text-white uppercase" style="background-color: #000000 !important; color: #ffffff !important;">Best Value</span>
               <span class="block text-[10px] font-bold uppercase tracking-wider text-black">Complete Collection</span>
               <span class="block text-xl font-extrabold text-black mt-0.5">₹149</span>
-              <span class="block text-[10px] text-neutral-500 mt-1">50 Exclusive Impasto 4K</span>
+              <span class="block text-[10px] text-neutral-500 mt-1">All 22+ Wallpapers</span>
             </div>
           </label>
         </div>
@@ -133,44 +132,34 @@ function injectCheckoutModal() {
             </div>
 
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-black mb-1">Phone / WhatsApp</label>
+              <label class="block text-xs font-bold uppercase tracking-wider text-black mb-1">Mobile Number</label>
               <input type="tel" id="cust-phone" placeholder="+91 9876543210 (Optional)" class="w-full rounded-xl border border-neutral-300 px-3.5 py-2.5 text-xs text-black outline-none focus:border-black transition">
             </div>
           </div>
 
-          <!-- Payment Instructions (Direct UPI, Scanner Barcode Removed) -->
-          <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 mt-4 space-y-3">
-            <div class="flex items-center justify-between border-b border-neutral-200 pb-2">
-              <span class="text-xs font-bold uppercase tracking-wider text-black">Pay via UPI</span>
-              <span id="checkout-total-amount" class="text-lg font-extrabold text-black">₹149</span>
+          <!-- Summary Bar -->
+          <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 flex items-center justify-between shadow-xs">
+            <div>
+              <span class="block text-[10px] font-bold uppercase tracking-wider text-neutral-500">Selected Package:</span>
+              <span id="checkout-plan-name" class="text-xs font-extrabold text-black">Complete Collection (22+ Artworks)</span>
+              <p class="text-[10px] text-neutral-400 mt-0.5">Delivery: Direct to your Gmail</p>
             </div>
-
-            <div class="bg-white p-3 rounded-xl border border-neutral-200 shadow-xs">
-              <span class="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1">Direct UPI ID:</span>
-              <div class="flex items-center justify-between gap-2">
-                <span id="checkout-upi-id" class="font-mono text-sm font-black text-black select-all">karanpw.live@oksbi</span>
-                <button type="button" id="btn-modal-copy-upi" class="rounded-lg bg-black text-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider hover:bg-neutral-800 transition cursor-pointer" style="background-color: #000000 !important; color: #ffffff !important;">
-                  Copy
-                </button>
-              </div>
-            </div>
-
-            <p class="text-[11px] text-neutral-500">
-              Supported Apps: Google Pay • PhonePe • Paytm • BHIM
-            </p>
-
-            <div class="pt-2 border-t border-neutral-200">
-              <label class="block text-[11px] font-bold uppercase tracking-wider text-black mb-1">UPI Transaction Reference / UTR Number <span class="text-neutral-400 font-normal">(Optional)</span></label>
-              <input type="text" id="cust-utr" placeholder="12-digit UTR or Transaction ID (e.g. 428901234567)" class="w-full rounded-xl border border-neutral-300 bg-white px-3.5 py-2.5 text-xs text-black outline-none focus:border-black transition font-mono">
+            <div class="text-right">
+              <span class="block text-[10px] font-bold uppercase tracking-wider text-neutral-500">Total Price:</span>
+              <span id="checkout-total-amount" class="text-xl font-black text-black">₹149</span>
             </div>
           </div>
 
-          <div id="checkout-error-msg" class="hidden text-xs font-semibold p-3 rounded-xl bg-rose-50 text-rose-800 border border-rose-200"></div>
+          <div id="checkout-error-msg" class="hidden text-xs font-semibold p-3 rounded-xl bg-rose-50 text-rose-800 border border-rose-200 text-center"></div>
 
           <!-- Submit Button -->
-          <button type="submit" id="btn-submit-order" class="w-full rounded-2xl bg-black py-4 text-xs font-extrabold uppercase tracking-widest text-white shadow-xl hover:bg-neutral-800 transition cursor-pointer mt-4" style="background-color: #000000 !important; color: #ffffff !important;">
-            <span style="color: #ffffff !important;">Confirm Booking &amp; Submit Order</span>
+          <button type="submit" id="btn-submit-order" class="w-full rounded-2xl bg-black py-4 text-xs font-extrabold uppercase tracking-widest text-white shadow-xl hover:bg-neutral-800 transition cursor-pointer mt-2" style="background-color: #000000 !important; color: #ffffff !important;">
+            <span id="btn-modal-submit-label" style="color: #ffffff !important;">Book Package Now (₹149)</span>
           </button>
+
+          <p class="text-center text-[11px] text-neutral-400 mt-2">
+            🔒 Booking details sent directly to <strong>karanpw.live@gmail.com</strong>
+          </p>
         </form>
       </div>
 
@@ -194,8 +183,8 @@ function injectCheckoutModal() {
 
         <div class="p-4 rounded-2xl bg-neutral-50 border border-neutral-200 text-left text-xs max-w-sm mx-auto space-y-1.5">
           <p><span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Customer:</span> <b id="success-cust-name" class="text-black"></b></p>
-          <p><span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Plan:</span> <b id="success-plan-name" class="text-black"></b></p>
-          <p><span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Amount Paid:</span> <b id="success-amount" class="text-black"></b></p>
+          <p><span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Package:</span> <b id="success-plan-name" class="text-black"></b></p>
+          <p><span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Amount:</span> <b id="success-amount" class="text-black"></b></p>
           <p><span class="text-neutral-500 font-bold uppercase tracking-wider text-[10px]">Notification:</span> <b class="font-mono text-neutral-800">Sent to karanpw.live@gmail.com</b></p>
         </div>
 
@@ -219,16 +208,6 @@ function injectCheckoutModal() {
     radio.addEventListener("change", updateSelectedPlanUI);
   });
 
-  const btnModalCopy = document.getElementById("btn-modal-copy-upi");
-  if (btnModalCopy) {
-    btnModalCopy.addEventListener("click", () => {
-      navigator.clipboard.writeText("karanpw.live@oksbi").then(() => {
-        btnModalCopy.textContent = "COPIED!";
-        setTimeout(() => { btnModalCopy.textContent = "COPY"; }, 1800);
-      });
-    });
-  }
-
   const form = document.getElementById("checkout-payment-form");
   const submitBtn = document.getElementById("btn-submit-order");
   const errorMsg = document.getElementById("checkout-error-msg");
@@ -242,12 +221,10 @@ function injectCheckoutModal() {
     const inputName = document.getElementById("cust-name");
     const inputEmail = document.getElementById("cust-email");
     const inputPhone = document.getElementById("cust-phone");
-    const inputUtr = document.getElementById("cust-utr");
 
     const name = inputName.value.trim();
     const email = inputEmail.value.trim();
     const phone = inputPhone.value.trim();
-    const utr = inputUtr.value.trim();
 
     if (!name) {
       errorMsg.textContent = "Kripya apna Full Name zaroor bharein.";
@@ -296,7 +273,7 @@ function injectCheckoutModal() {
       Customer_Phone: phone || "Not provided",
       Selected_Bundle: planName,
       Amount_Paid: `₹${amount}`,
-      Transaction_UTR: utr || "Direct Booking",
+      Booking_Status: "Booked - Wallpapers Pending Dispatch",
       Timestamp: orderTime
     };
 
@@ -324,7 +301,8 @@ function injectCheckoutModal() {
         customerPhone: phone,
         packType: planName,
         packPrice: amount,
-        transactionUtr: utr || "Direct Booking",
+        transactionUtr: "Direct Package Booking",
+        status: "Booked",
         timestamp: Date.now()
       })
     }).catch(err => console.warn("[ArtDrop] Local DB notice:", err.message));
@@ -337,7 +315,7 @@ function injectCheckoutModal() {
         packType: planName,
         amount: amount,
         currency: "INR",
-        transactionUtr: utr || "Direct Booking",
+        transactionUtr: "Direct Package Booking",
         status: "booked",
         createdAt: serverTimestamp()
       }).catch(err => console.warn("Firestore notice:", err.message));
